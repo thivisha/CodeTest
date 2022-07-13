@@ -22,45 +22,27 @@ namespace MailContainerTest.Services
             switch (request.MailType)
             {
                 case MailType.StandardLetter:
-                    if (mailContainer == null)
+                    if (mailContainer == null 
+                        || (!mailContainer.AllowedMailType.HasFlag(AllowedMailType.StandardLetter))
                     {
                         result.Status = false;
-                    }
-                    else if (!mailContainer.AllowedMailType.HasFlag(AllowedMailType.StandardLetter))
-                    {
-                        result.Status = false;
-                    }
+                    }                   
                     break;
-
                 case MailType.LargeLetter:
-                    if (mailContainer == null)
+                    if (mailContainer == null 
+                            || (!mailContainer.AllowedMailType.HasFlag(AllowedMailType.LargeLetter)
+                            || mailContainer.Capacity < request.NumberOfMailItems)
                     {
                         result.Status = false;
-                    }
-                    else if (!mailContainer.AllowedMailType.HasFlag(AllowedMailType.LargeLetter))
-                    {
-                        result.Status = false;
-                    }
-                    else if (mailContainer.Capacity < request.NumberOfMailItems)
-                    {
-                        result.Status = false;
-                    }
+                    }                    
                     break;
-
                 case MailType.SmallParcel:
-                    if (mailContainer == null)
+                    if (mailContainer == null 
+                            ||  (!mailContainer.AllowedMailType.HasFlag(AllowedMailType.SmallParcel)
+                            ||  (mailContainer.Status != MailContainerStatus.Operational))
                     {
                         result.Status = false;
-                    }
-                    else if (!mailContainer.AllowedMailType.HasFlag(AllowedMailType.SmallParcel))
-                    {
-                        result.Status = false;
-
-                    }
-                    else if (mailContainer.Status != MailContainerStatus.Operational)
-                    {
-                        result.Status = false;
-                    }
+                    }                    
                     break;
             }
 
